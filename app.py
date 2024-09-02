@@ -2,10 +2,13 @@ import openai
 from flask import Flask, jsonify, request
 from dotenv import dotenv_values
 import requests
+import os
 
-config = dotenv_values(".env")
+config = dotenv_values(".env") or os.environ.get("DATABASE_URL")
 
-client = openai.Client(api_key=config['OPENAI_API_KEY'])
+openai_key = config['OPENAI_API_KEY']
+
+client = openai.Client(api_key=openai_key)
 
 app = Flask(__name__)
 

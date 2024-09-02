@@ -1,20 +1,21 @@
 import openai
 from flask import Flask, jsonify, request
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 import requests
 import os
 
-config = dotenv_values(".env") or os.environ.get("DATABASE_URL")
+load_dotenv()
 
-openai_key = config['OPENAI_API_KEY']
+openai_key = os.environ.get('OPENAI_API_KEY')
+base_url = os.environ.get('ZAPI_BASE_URL')
+zapi_security_token = os.environ.get('ZAPI_SECURITY_TOKEN')
 
 client = openai.Client(api_key=openai_key)
 
 app = Flask(__name__)
 
-base_url = config['ZAPI_BASE_URL']
 headers = {
-  "Client-Token": config['ZAPI_SECURITY_TOKEN']
+  "Client-Token": zapi_security_token
 }
 
 content_system = '''

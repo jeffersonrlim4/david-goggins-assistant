@@ -51,19 +51,25 @@ def send_message(phone, message):
 def receive_message():
   data = request.json
   
-  phone = data['phone']
-  message = data['text']['message']
+  if data['text']:
   
-  if phone not in local_cache:
-    local_cache[phone] = [{'role': 'system', 'content': content_system}]
+      print(data)
+      
+      phone = data['phone']
+      message = data['text']['message']
+      
+      if phone not in local_cache:
+        local_cache[phone] = [{'role': 'system', 'content': content_system}]
+      
+      local_cache[phone].append({'role': 'user', 'content': message})
+      
+      openai_text = generate_text_openai(local_cache[phone], phone)
+      
+      send_message(phone, openai_text)
+      
+      return jsonify({"data": local_cache[phone]})
   
-  local_cache[phone].append({'role': 'user', 'content': message})
-  
-  openai_text = generate_text_openai(local_cache[phone], phone)
-  
-  send_message(phone, openai_text)
-  
-  return jsonify({"data": local_cache[phone]})
+  return jsonify({"message": "Is not a private mensage"}), 400
 
 if __name__ == '__main__':
   app.run(debug=True)

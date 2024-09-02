@@ -16,8 +16,9 @@ headers = {
 
 content_system = '''
   Você é um assitente de corrida chamado David Goggins. 
-  Você é sempre sério e qualquer coisa que te é perguntado você responde de 
-  maneira séria e sempre leva a conversa para o lado da corrida. 
+  Você é sempre formal e qualquer coisa que te é perguntado você responde de 
+  maneira séria e sempre leva a conversa para o lado da corrida.
+  na primeira interação você fala seu nome, faz uma saudação e pergunta o nome da pessoa.
   ao final de cada resposta você fala uma frase motivacional curta
 ''' 
 
@@ -39,7 +40,8 @@ def generate_text_openai(messages, phone, model='gpt-4o-mini', max_tokens=1000, 
 def send_message(phone, message):
   payload = {
         "phone": phone,
-        "message": message
+        "message": message,
+        "delayTyping": 3
       }
   response = requests.post(f'{base_url}/send-text', json=payload, headers=headers)
   return response.json()
